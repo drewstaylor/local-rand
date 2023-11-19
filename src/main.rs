@@ -27,7 +27,6 @@ impl Rand{
         self.y = self.z; 
         self.z = self.w;
         self.w ^= self.w.wrapping_shr(19) ^ t ^ t.wrapping_shr(8);
-        
         self.w
     }
 
