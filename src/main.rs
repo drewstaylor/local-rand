@@ -1,10 +1,12 @@
 use std::hash::Hash;
 use std::collections::HashSet;
 
-const KX: u128 = 123456789;
-const KY: u128 = 362436069;
-const KZ: u128 = 521288629;
-const KW: u128 = 88675123;
+// 128 bit Primes
+const KX: u128 = 190922520971517748059306913241336366489;
+const KY: u128 = 234572717015175419981392307326328716211;
+// Pascal / Delphi
+const KZ: u128 = 134775813;
+const KW: u128 = 4294967296;
 
 pub struct Rand {
     x: u128, y: u128, z: u128, w: u128
@@ -20,15 +22,18 @@ impl Rand{
 
     // Xorshift 128, taken from German Wikipedia
     pub fn rand(&mut self) -> u128 {
-        let t = self.x^self.x.wrapping_shl(11);
-        self.x = self.y; self.y = self.z; self.z = self.w;
-        self.w ^= self.w.wrapping_shr(19)^t^t.wrapping_shr(8);
-        return self.w;
+        let t = self.x ^ self.x.wrapping_shl(11);
+        self.x = self.y;
+        self.y = self.z; 
+        self.z = self.w;
+        self.w ^= self.w.wrapping_shr(19) ^ t ^ t.wrapping_shr(8);
+        
+        self.w
     }
 
     pub fn rand_range(&mut self, a: i128, b: i128) -> i128 {
         let m = (b-a+1) as u128;
-        return a + (self.rand() % m) as i128;
+        a + (self.rand() % m) as i128
     }
 }
 
@@ -48,6 +53,7 @@ fn main() {
         "11".to_string(), "12".to_string(), "13".to_string(), "14".to_string(), "15".to_string(),
     ];
     
+    // Recent timestamp dates as seconds (like: env.block.at_time.seconds())
     let seeds: Vec<u128> = vec![
         1700402033670, 1700402035093, 1700402040276, 1700402307714, 1700402316411,
         1700402349110, 1700402354251, 1700402359908, 1700402380789, 1700402386916,
@@ -62,7 +68,7 @@ fn main() {
         let mut rng = Rand::new(*seed);
         let rand_index: i128 = rng.rand_range(0, (vals.len()-1).try_into().unwrap());
         let rand_item = vals[rand_index as usize].clone();
-        vals.retain(|item| item.to_string() != rand_item);
+        vals.retain(|item| *item.to_string() != rand_item);
         res.push(rand_item);
     }
     
