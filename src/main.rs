@@ -26,23 +26,9 @@ impl Rand{
         return self.w;
     }
 
-    pub fn shuffle<T>(&mut self, a: &mut [T]) {
-        if a.len()==0 {return;}
-        let mut i = a.len()-1;
-        while i>0 {
-            let j = (self.rand() as usize)%(i+1);
-            a.swap(i,j);
-            i-=1;
-        }
-    }
-
     pub fn rand_range(&mut self, a: i128, b: i128) -> i128 {
         let m = (b-a+1) as u128;
         return a + (self.rand() % m) as i128;
-    }
-
-    pub fn rand_float(&mut self) -> f64 {
-        (self.rand() as f64)/(<u32>::max_value() as f64)
     }
 }
 
@@ -56,17 +42,6 @@ where
 }
 
 fn main() {
-    // let mut rng = Rand::new(1700401794);
-    
-    // // Rand in range
-    // let v: Vec<i128> = (0..100).map(|_| rng.rand_range(1,100)).collect();
-    // println!("{:?}",v);
-
-    // Shuffle an array
-    // let mut v: Vec<u32> = (1..101).collect();
-    // rng.shuffle(&mut v);
-    // println!("{:?}",v);
-    
     let mut vals: Vec<String> = vec![
         "1".to_string(), "2".to_string(), "3".to_string(), "4".to_string(), "5".to_string(),
         "6".to_string(), "7".to_string(), "8".to_string(), "9".to_string(), "10".to_string(),
