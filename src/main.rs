@@ -30,9 +30,9 @@ impl Rand{
         self.w
     }
 
-    pub fn rand_range(&mut self, a: i128, b: i128) -> i128 {
-        let m = (b-a+1) as u128;
-        a + (self.rand() % m) as i128
+    pub fn rand_range(&mut self, a: u128, b: u128) -> u128 {
+        let m = b - a + 1;
+        a + (self.rand() % m)
     }
 }
 
@@ -65,7 +65,7 @@ fn main() {
     
     for seed in seeds.iter() {
         let mut rng = Rand::new(*seed);
-        let rand_index: i128 = rng.rand_range(0, (vals.len()-1).try_into().unwrap());
+        let rand_index: u128 = rng.rand_range(0, (vals.len()-1).try_into().unwrap());
         let rand_item = vals[rand_index as usize].clone();
         vals.retain(|item| *item.to_string() != rand_item);
         res.push(rand_item);
